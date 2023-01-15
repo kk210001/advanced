@@ -1,6 +1,7 @@
 package hello.advanced.trace.hello.trace.strategy;
 
 import hello.advanced.trace.hello.trace.strategy.code.strategy.ContextV1;
+import hello.advanced.trace.hello.trace.strategy.code.strategy.Strategy;
 import hello.advanced.trace.hello.trace.strategy.code.strategy.StrategyLogic1;
 import hello.advanced.trace.hello.trace.strategy.code.strategy.StrategyLogic2;
 import hello.advanced.trace.hello.trace.template.code.AbstractTemplate;
@@ -82,4 +83,63 @@ public class ContextV1Test {
         ContextV1 context2 = new ContextV1(strategyLogic1);
         context2.execute();
     }
+
+    @Test
+    void strategyV2() {
+        Strategy strategyLogic1 = new Strategy() {
+            @Override
+            public void call() {
+                log.info("비지니스 로직1 실행");
+            }
+        };
+        ContextV1 context1 = new ContextV1(strategyLogic1);
+        context1.execute();
+
+        log.info("strategyLogic1={}",strategyLogic1.getClass());
+
+
+        Strategy strategyLogic2 = new Strategy() {
+            @Override
+            public void call() {
+                log.info("비지니스 로직2 실행");
+            }
+        };
+        ContextV1 context2 = new ContextV1(strategyLogic1);
+        context1.execute();
+
+        log.info("strategyLogic2={}",strategyLogic2.getClass());
+    }
+
+    @Test
+    void strategyV3() {
+        ContextV1 context1 = new ContextV1(new Strategy() {
+            @Override
+            public void call() {
+                log.info("비지니스 로직1 실행");
+            }
+        });
+        context1.execute();
+
+        ContextV1 context2 = new ContextV1(new Strategy() {
+            @Override
+            public void call() {
+                log.info("비지니스 로직2 실행");
+            }
+        });
+        context2.execute();
+
+    }
+
+    @Test
+    void strategyV4() {
+
+        ContextV1 context1 = new ContextV1(() -> log.info("비지니스 로직1 실행"));
+        context1.execute();
+
+        ContextV1 context2 = new ContextV1(() -> log.info("비지니스 로직2 실행"));
+        context2.execute();
+
+    }
+
+
 }
